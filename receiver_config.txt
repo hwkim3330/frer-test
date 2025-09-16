@@ -1,0 +1,32 @@
+#!/bin/bash
+# LAN9662 Receiver Board Configuration (via SSH)
+# Date: 2025-09-16
+# Connection: SSH root@169.254.100.2
+
+# Current Configuration Status:
+# - Bridge br0 with VLAN filtering enabled
+# - eth1, eth2, eth3 all members of br0
+# - VLAN 10 configured on all ports (eth3 as access port pvid untagged)
+# - FRER VLAN 10 with flood_disable=0, learn_disable=0
+
+# VCAP Rules (IS1 Lookup 1):
+# Rule 1001: eth1 (0x001) → ISDX=3
+# Rule 1002: eth2 (0x002) → ISDX=4
+
+# FRER Configuration:
+# Compound Stream: CS 0 (enabled, alg=0, hlen=10, reset_time=500)
+# Member Streams:
+#   - MS eth1 ID=28 (enabled, alg=1, hlen=2, cs_id=0)
+#   - MS eth2 ID=30 (enabled, alg=1, hlen=2, cs_id=0)
+#
+# Ingress Flows:
+#   - iflow 3: ISDX=3 → MS=28, pop R-TAG, output to eth3
+#   - iflow 4: ISDX=4 → MS=30, pop R-TAG, output to eth3
+
+# Bridge Flood Control:
+# eth1, eth2: flood off, mcast_flood off, neigh_suppress on
+# eth3: flood on, mcast_flood on, neigh_suppress off
+
+# Current Status:
+# - Waiting for R-TAG frames from sender
+# - All FRER counters showing 0 (no traffic yet)

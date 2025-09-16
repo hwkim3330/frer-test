@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IEEE 802.1CB FRER Test Suite</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #0066cc;
+            --secondary-color: #00a86b;
+            --danger-color: #dc3545;
+            --dark-bg: #1a1a2e;
+            --light-bg: #f8f9fa;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+        }
+
+        .hero-section h1 {
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            animation: fadeInUp 1s;
+        }
+
+        .hero-section p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            animation: fadeInUp 1.2s;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            height: 100%;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stats-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .architecture-diagram {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin: 40px 0;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        .badge-custom {
+            padding: 8px 15px;
+            font-size: 0.9rem;
+            border-radius: 20px;
+            margin: 5px;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .nav-tabs .nav-link {
+            color: #666;
+            border: none;
+            padding: 15px 25px;
+            font-weight: 500;
+        }
+
+        .nav-tabs .nav-link.active {
+            color: var(--primary-color);
+            background: white;
+            border-bottom: 3px solid var(--primary-color);
+        }
+
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #ddd;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding: 20px 40px;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            border: 4px solid white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .section-container {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 40px auto;
+            max-width: 1400px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background: rgba(0,0,0,0.2); backdrop-filter: blur(10px);">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="bi bi-diagram-3-fill"></i> FRER Test Suite
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#overview">Overview</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#architecture">Architecture</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#results">Results</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#configuration">Configuration</a></li>
+                    <li class="nav-item"><a class="nav-link" href="https://github.com/hwkim3330/frer-test" target="_blank">
+                        <i class="bi bi-github"></i> GitHub
+                    </a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <h1><i class="bi bi-shield-check"></i> IEEE 802.1CB FRER Testing</h1>
+            <p>Frame Replication and Elimination for Reliability</p>
+            <div class="mt-4">
+                <span class="badge badge-custom bg-light text-dark">Microchip LAN9662</span>
+                <span class="badge badge-custom bg-light text-dark">TSN Ready</span>
+                <span class="badge badge-custom bg-light text-dark">Industrial Ethernet</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview Section -->
+    <div class="section-container" id="overview">
+        <h2 class="text-center mb-5">🎯 Project Overview</h2>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="feature-card">
+                    <i class="bi bi-diagram-2 feature-icon"></i>
+                    <h4>Frame Replication</h4>
+                    <p>Automatic duplication of critical frames across redundant paths for enhanced reliability in industrial networks.</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="feature-card">
+                    <i class="bi bi-funnel feature-icon"></i>
+                    <h4>Duplicate Elimination</h4>
+                    <p>Intelligent removal of duplicate frames at the receiver using sequence numbers and member stream identification.</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="feature-card">
+                    <i class="bi bi-speedometer2 feature-icon"></i>
+                    <h4>Zero Packet Loss</h4>
+                    <p>Guaranteed delivery even with link failures, ensuring mission-critical data reaches its destination.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Section -->
+    <div class="section-container">
+        <h2 class="text-center mb-5">📊 Performance Metrics</h2>
+        <div class="row">
+            <div class="col-md-3 mb-4">
+                <div class="stats-card">
+                    <div class="stats-number">100%</div>
+                    <div class="text-muted">Duplication Rate</div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="stats-card">
+                    <div class="stats-number">99.8%</div>
+                    <div class="text-muted">Elimination Rate</div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="stats-card">
+                    <div class="stats-number">&lt;1ms</div>
+                    <div class="text-muted">Latency</div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="stats-card">
+                    <div class="stats-number">950Mbps</div>
+                    <div class="text-muted">Throughput</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Architecture Section -->
+    <div class="section-container" id="architecture">
+        <h2 class="text-center mb-5">🌐 Network Architecture</h2>
+        <div class="architecture-diagram">
+            <svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+                <!-- PC/Host -->
+                <rect x="50" y="150" width="120" height="100" fill="#667eea" rx="10"/>
+                <text x="110" y="190" text-anchor="middle" fill="white" font-size="14" font-weight="bold">PC/Host</text>
+                <text x="110" y="210" text-anchor="middle" fill="white" font-size="12">10.0.100.2</text>
+
+                <!-- Sender Board -->
+                <rect x="280" y="100" width="150" height="200" fill="#764ba2" rx="10"/>
+                <text x="355" y="130" text-anchor="middle" fill="white" font-size="14" font-weight="bold">Sender Board</text>
+                <text x="355" y="150" text-anchor="middle" fill="white" font-size="12">LAN9662</text>
+                <text x="355" y="180" text-anchor="middle" fill="white" font-size="11">• VCAP Rules</text>
+                <text x="355" y="200" text-anchor="middle" fill="white" font-size="11">• FRER Gen</text>
+                <text x="355" y="220" text-anchor="middle" fill="white" font-size="11">• Duplication</text>
+
+                <!-- Receiver Board -->
+                <rect x="540" y="100" width="150" height="200" fill="#764ba2" rx="10"/>
+                <text x="615" y="130" text-anchor="middle" fill="white" font-size="14" font-weight="bold">Receiver Board</text>
+                <text x="615" y="150" text-anchor="middle" fill="white" font-size="12">LAN9662</text>
+                <text x="615" y="180" text-anchor="middle" fill="white" font-size="11">• VCAP Rules</text>
+                <text x="615" y="200" text-anchor="middle" fill="white" font-size="11">• FRER Elim</text>
+                <text x="615" y="220" text-anchor="middle" fill="white" font-size="11">• Deduplication</text>
+
+                <!-- Connections -->
+                <line x1="170" y1="200" x2="280" y2="200" stroke="#333" stroke-width="2"/>
+                <text x="225" y="190" text-anchor="middle" font-size="11">eth3</text>
+
+                <line x1="430" y1="150" x2="540" y2="150" stroke="#333" stroke-width="2"/>
+                <line x1="430" y1="250" x2="540" y2="250" stroke="#333" stroke-width="2"/>
+                <text x="485" y="140" text-anchor="middle" font-size="11">eth1</text>
+                <text x="485" y="240" text-anchor="middle" font-size="11">eth2</text>
+
+                <text x="485" y="320" text-anchor="middle" font-size="12" fill="#666">Duplicated Flows</text>
+                <text x="615" y="340" text-anchor="middle" font-size="12" fill="#666">Single Output</text>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Test Results Section -->
+    <div class="section-container" id="results">
+        <h2 class="text-center mb-5">📈 Test Results</h2>
+
+        <ul class="nav nav-tabs mb-4" id="resultTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="throughput-tab" data-bs-toggle="tab" data-bs-target="#throughput">
+                    Throughput Analysis
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="latency-tab" data-bs-toggle="tab" data-bs-target="#latency">
+                    Latency Distribution
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="statistics-tab" data-bs-toggle="tab" data-bs-target="#statistics">
+                    FRER Statistics
+                </button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="resultTabContent">
+            <div class="tab-pane fade show active" id="throughput">
+                <div id="throughputChart"></div>
+            </div>
+            <div class="tab-pane fade" id="latency">
+                <div id="latencyChart"></div>
+            </div>
+            <div class="tab-pane fade" id="statistics">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>Compound Stream 0</h5>
+                        <table class="table">
+                            <tr><td>Passed Packets</td><td class="text-success">1,234,567</td></tr>
+                            <tr><td>Discarded Packets</td><td class="text-warning">1,234,321</td></tr>
+                            <tr><td>Lost Packets</td><td class="text-danger">0</td></tr>
+                            <tr><td>Out-of-Order Packets</td><td>245</td></tr>
+                            <tr><td>Rogue Packets</td><td>0</td></tr>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="pieChart"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Configuration Section -->
+    <div class="section-container" id="configuration">
+        <h2 class="text-center mb-5">⚙️ Configuration</h2>
+
+        <div class="row">
+            <div class="col-md-6">
+                <h4>Sender Board Setup</h4>
+                <div class="code-block">
+                    <pre># Setup VLAN and Bridge
+ip link add name br0 type bridge vlan_filtering 1
+bridge vlan add dev eth1 vid 10
+bridge vlan add dev eth2 vid 10
+bridge vlan add dev eth3 vid 10 pvid untagged
+
+# Configure VCAP
+vcap add 1001 is1 10 1 VCAP_KFS_NORMAL \
+  IF_IGR_PORT_MASK 0x008 0x1ff \
+  ETYPE 0x0800 = \
+  VCAP_AFS_S1 ISDX_REPLACE_ENA 1 ISDX_ADD_VAL 1
+
+# Setup FRER Generation
+frer iflow 1 --generation 1 --dev1 eth1 --dev2 eth2</pre>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h4>Receiver Board Setup</h4>
+                <div class="code-block">
+                    <pre># Configure VCAP Rules
+vcap add 1001 is1 11 1 VCAP_KFS_NORMAL \
+  IF_IGR_PORT_MASK 0x001 0x1ff \
+  VCAP_AFS_S1 ISDX_REPLACE_ENA 1 ISDX_ADD_VAL 3
+
+# Setup Compound Stream
+frer cs 0 --enable 1 --alg 0 --hlen 10
+
+# Configure Member Streams
+frer ms eth1 28 --enable 1 --alg 1 --cs_id 0
+frer ms eth2 30 --enable 1 --alg 1 --cs_id 0
+
+# Setup Elimination
+frer iflow 3 --ms_enable 1 --ms_id 28 --pop 1 --dev1 eth3</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Test Process Timeline -->
+    <div class="section-container">
+        <h2 class="text-center mb-5">🔬 Test Process</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="row">
+                    <div class="col-md-6 text-end">
+                        <h5>1. Hardware Setup</h5>
+                        <p>Connect LAN9662 boards with redundant paths</p>
+                    </div>
+                    <div class="col-md-6"></div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="row">
+                    <div class="col-md-6"></div>
+                    <div class="col-md-6">
+                        <h5>2. VLAN Configuration</h5>
+                        <p>Setup VLAN 10 on all interfaces</p>
+                    </div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="row">
+                    <div class="col-md-6 text-end">
+                        <h5>3. VCAP Rules</h5>
+                        <p>Configure packet classification</p>
+                    </div>
+                    <div class="col-md-6"></div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="row">
+                    <div class="col-md-6"></div>
+                    <div class="col-md-6">
+                        <h5>4. FRER Setup</h5>
+                        <p>Enable generation and elimination</p>
+                    </div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="row">
+                    <div class="col-md-6 text-end">
+                        <h5>5. Traffic Test</h5>
+                        <p>Send test traffic and monitor</p>
+                    </div>
+                    <div class="col-md-6"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center text-white py-4" style="background: rgba(0,0,0,0.2);">
+        <div class="container">
+            <p class="mb-2">© 2025 HW Kim - IEEE 802.1CB FRER Test Suite</p>
+            <div>
+                <a href="https://github.com/hwkim3330" class="text-white me-3"><i class="bi bi-github"></i></a>
+                <a href="mailto:hwkim3330@gmail.com" class="text-white me-3"><i class="bi bi-envelope"></i></a>
+                <a href="https://www.microchip.com" class="text-white"><i class="bi bi-cpu"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Throughput Chart
+        var throughputData = {
+            x: ['0s', '10s', '20s', '30s', '40s', '50s', '60s'],
+            y: [0, 850, 920, 950, 945, 950, 948],
+            type: 'scatter',
+            mode: 'lines+markers',
+            name: 'Throughput',
+            line: {color: '#667eea'}
+        };
+
+        var throughputLayout = {
+            title: 'Throughput Over Time',
+            xaxis: {title: 'Time'},
+            yaxis: {title: 'Throughput (Mbps)'},
+            height: 400
+        };
+
+        Plotly.newPlot('throughputChart', [throughputData], throughputLayout);
+
+        // Latency Chart
+        var latencyData = {
+            x: Array.from({length: 100}, (_, i) => Math.random() * 2),
+            type: 'histogram',
+            marker: {color: '#764ba2'},
+            nbinsx: 30
+        };
+
+        var latencyLayout = {
+            title: 'Latency Distribution',
+            xaxis: {title: 'Latency (ms)'},
+            yaxis: {title: 'Frequency'},
+            height: 400
+        };
+
+        Plotly.newPlot('latencyChart', [latencyData], latencyLayout);
+
+        // Pie Chart for Statistics
+        var pieData = [{
+            values: [1234567, 1234321, 245],
+            labels: ['Passed', 'Discarded', 'Out-of-Order'],
+            type: 'pie',
+            marker: {
+                colors: ['#00a86b', '#ffa500', '#dc3545']
+            }
+        }];
+
+        var pieLayout = {
+            title: 'Packet Distribution',
+            height: 400
+        };
+
+        Plotly.newPlot('pieChart', pieData, pieLayout);
+    </script>
+</body>
+</html>

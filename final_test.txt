@@ -1,0 +1,15 @@
+Commands to run on serial board for self-test:
+
+# Create loopback FRER test
+# eth3 input → FRER gen → eth1/eth2 → external loop → FRER elim → output
+
+1. Keep existing generation config
+2. Add elimination on same board:
+   frer cs 0 --enable 1 --alg 0 --hlen 10 --reset_time 500
+   frer ms eth1 20 --enable 1 --alg 1 --reset_time 500 --cs_id 0
+   frer ms eth2 22 --enable 1 --alg 1 --reset_time 500 --cs_id 0
+
+3. Check stats:
+   frer cs 0 --cnt
+   frer ms eth1 20 --cnt
+   frer ms eth2 22 --cnt

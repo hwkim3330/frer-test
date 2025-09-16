@@ -1,0 +1,39 @@
+# Sender Board Setup Commands
+# Execute these via serial console /dev/ttyUSB0
+
+# 1. Enable interfaces
+ip link set eth1 up
+ip link set eth2 up
+ip link set eth3 up
+
+# 2. Create and configure bridge
+ip link add name br0 type bridge vlan_filtering 1
+ip link set br0 up
+ip link set eth1 master br0
+ip link set eth2 master br0
+ip link set eth3 master br0
+
+# 3. Configure VLAN 10
+bridge vlan del dev eth1 vid 1 2>/dev/null
+bridge vlan del dev eth2 vid 1 2>/dev/null
+bridge vlan del dev eth3 vid 1 2>/dev/null
+
+# eth3: ingress from sender PC (access port)
+bridge vlan add dev eth3 vid 10 pvid untagged
+# eth1, eth2: egress to receiver board (tagged)
+bridge vlan add dev eth1 vid 10
+bridge vlan add dev eth2 vid 10
+
+# 4. FRER VLAN settings
+frer vlan 10 --flood_disable 0 --learn_disable 0
+
+# 5. VCAP: Classify traffic from eth3 to ISDX=1
+vcap del 1001 2>/dev/null
+vcap add 1001 is1 10 1 VCAP_KFS_NORMAL IF_IGR_PORT_MASK 0x008 0x1ff VCAP_AFS_S1 ISDX_REPLACE_ENA 1 ISDX_ADD_VAL 1
+
+# 6. FRER: Generate R-TAG and replicate to eth1+eth2
+frer iflow 1 --generation 1 --dev1 eth1 --dev2 eth2
+
+# 7. Verify configuration
+vcap get 1001
+frer iflow 1
