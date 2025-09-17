@@ -32,31 +32,35 @@ This repository contains a comprehensive test suite for IEEE 802.1CB Frame Repli
 ## 🔧 Hardware Requirements
 
 ### Required Equipment
-- 2x Microchip LAN9662 VelocityDRIVE boards
-- PC with Linux (Ubuntu 22.04 or later)
-- Ethernet cables for interconnection
-- USB-to-Serial adapter for console access
+- **2x Linux PCs**: One sender (10.0.100.1), one receiver (10.0.100.2)
+- **2x Microchip LAN9662 boards**: For FRER processing
+- **6x Ethernet cables**: PC-to-board and board-to-board connections
+- **1x USB-to-Serial adapter**: For board console access
 
-### Network Interfaces
-- `eth0`: Management interface (169.254.100.x)
-- `eth1`: FRER member port 1
-- `eth2`: FRER member port 2
-- `eth3`: Access port (sender) or egress port (receiver)
+### Physical Connections
+- **Sender PC (enp2s0)** → **Sender Board (eth3)**
+- **Sender Board (eth1)** → **Receiver Board (eth1)**
+- **Sender Board (eth2)** → **Receiver Board (eth2)**
+- **Receiver Board (eth3)** → **Receiver PC (enp15s0)**
 
 ## 🌐 Network Architecture
 
 ```
-┌─────────────┐         ┌─────────────────┐         ┌─────────────────┐
-│   PC/Host   │────────▶│  Sender Board   │────────▶│ Receiver Board  │
-│ 10.0.100.2  │  eth3   │   (LAN9662)     │ eth1/2  │   (LAN9662)     │
-└─────────────┘         │                 │         │                 │
-                        │ - VCAP Rules     │         │ - VCAP Rules    │
-                        │ - FRER Gen       │         │ - FRER Elim     │
-                        │ - Duplication    │         │ - Deduplication │
-                        └─────────────────┘         └─────────────────┘
-                                │                            │
-                           Duplicated                   Single Flow
-                             Flows                        Output
+┌──────────────┐      ┌──────────────┐      ┌──────────────┐      ┌──────────────┐
+│  Sender PC   │      │ Sender Board │      │Receiver Board│      │ Receiver PC  │
+│ 10.0.100.1   │─────▶│  (LAN9662)   │─────▶│  (LAN9662)   │─────▶│ 10.0.100.2   │
+│              │ eth3 │              │eth1/2│              │ eth3 │              │
+│  Traffic Gen │      │ FRER Gen     │      │ FRER Elim    │      │Traffic Recv  │
+└──────────────┘      │              │      │              │      └──────────────┘
+                      │   ┌─eth1─────┼──────┼──eth1─┐      │
+                      │   │          │      │       │      │
+                      │   │Duplicate │      │Dedupe │      │
+                      │   │          │      │       │      │
+                      │   └─eth2─────┼──────┼──eth2─┘      │
+                      └──────────────┘      └──────────────┘
+                                                   │
+                        R-TAG Added           R-TAG Removed
+                        Seq Numbers          Single Stream
 ```
 
 ## 📦 Installation
