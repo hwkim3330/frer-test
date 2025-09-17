@@ -268,39 +268,94 @@
     <div class="section-container" id="architecture">
         <h2 class="text-center mb-5">🌐 Network Architecture</h2>
         <div class="architecture-diagram">
-            <svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
-                <!-- PC/Host -->
-                <rect x="50" y="150" width="120" height="100" fill="#667eea" rx="10"/>
-                <text x="110" y="190" text-anchor="middle" fill="white" font-size="14" font-weight="bold">PC/Host</text>
-                <text x="110" y="210" text-anchor="middle" fill="white" font-size="12">10.0.100.2</text>
+            <svg viewBox="0 0 1000 400" xmlns="http://www.w3.org/2000/svg">
+                <!-- Sender PC -->
+                <rect x="50" y="150" width="120" height="100" fill="#28a745" rx="10"/>
+                <text x="110" y="185" text-anchor="middle" fill="white" font-size="13" font-weight="bold">Sender PC</text>
+                <text x="110" y="205" text-anchor="middle" fill="white" font-size="11">10.0.100.1</text>
+                <text x="110" y="225" text-anchor="middle" fill="white" font-size="10">Traffic Gen</text>
+                <text x="110" y="240" text-anchor="middle" fill="white" font-size="9">enp2s0</text>
 
                 <!-- Sender Board -->
-                <rect x="280" y="100" width="150" height="200" fill="#764ba2" rx="10"/>
-                <text x="355" y="130" text-anchor="middle" fill="white" font-size="14" font-weight="bold">Sender Board</text>
-                <text x="355" y="150" text-anchor="middle" fill="white" font-size="12">LAN9662</text>
-                <text x="355" y="180" text-anchor="middle" fill="white" font-size="11">• VCAP Rules</text>
-                <text x="355" y="200" text-anchor="middle" fill="white" font-size="11">• FRER Gen</text>
-                <text x="355" y="220" text-anchor="middle" fill="white" font-size="11">• Duplication</text>
+                <rect x="260" y="100" width="150" height="200" fill="#667eea" rx="10"/>
+                <text x="335" y="130" text-anchor="middle" fill="white" font-size="13" font-weight="bold">Sender Board</text>
+                <text x="335" y="150" text-anchor="middle" fill="white" font-size="11">LAN9662</text>
+                <text x="335" y="175" text-anchor="middle" fill="white" font-size="10">• VCAP Rules</text>
+                <text x="335" y="195" text-anchor="middle" fill="white" font-size="10">• FRER Gen</text>
+                <text x="335" y="215" text-anchor="middle" fill="white" font-size="10">• Duplication</text>
+                <text x="335" y="235" text-anchor="middle" fill="white" font-size="10">• R-TAG Add</text>
+
+                <!-- Port labels for Sender Board -->
+                <circle cx="260" cy="200" r="5" fill="white"/>
+                <text x="245" y="204" text-anchor="end" fill="#333" font-size="9">eth3</text>
+                <circle cx="410" cy="150" r="5" fill="white"/>
+                <text x="425" y="154" text-anchor="start" fill="#333" font-size="9">eth1</text>
+                <circle cx="410" cy="250" r="5" fill="white"/>
+                <text x="425" y="254" text-anchor="start" fill="#333" font-size="9">eth2</text>
 
                 <!-- Receiver Board -->
                 <rect x="540" y="100" width="150" height="200" fill="#764ba2" rx="10"/>
-                <text x="615" y="130" text-anchor="middle" fill="white" font-size="14" font-weight="bold">Receiver Board</text>
-                <text x="615" y="150" text-anchor="middle" fill="white" font-size="12">LAN9662</text>
-                <text x="615" y="180" text-anchor="middle" fill="white" font-size="11">• VCAP Rules</text>
-                <text x="615" y="200" text-anchor="middle" fill="white" font-size="11">• FRER Elim</text>
-                <text x="615" y="220" text-anchor="middle" fill="white" font-size="11">• Deduplication</text>
+                <text x="615" y="130" text-anchor="middle" fill="white" font-size="13" font-weight="bold">Receiver Board</text>
+                <text x="615" y="150" text-anchor="middle" fill="white" font-size="11">LAN9662</text>
+                <text x="615" y="175" text-anchor="middle" fill="white" font-size="10">• VCAP Rules</text>
+                <text x="615" y="195" text-anchor="middle" fill="white" font-size="10">• FRER Elim</text>
+                <text x="615" y="215" text-anchor="middle" fill="white" font-size="10">• Deduplication</text>
+                <text x="615" y="235" text-anchor="middle" fill="white" font-size="10">• R-TAG Remove</text>
 
-                <!-- Connections -->
-                <line x1="170" y1="200" x2="280" y2="200" stroke="#333" stroke-width="2"/>
-                <text x="225" y="190" text-anchor="middle" font-size="11">eth3</text>
+                <!-- Port labels for Receiver Board -->
+                <circle cx="540" cy="150" r="5" fill="white"/>
+                <text x="525" y="154" text-anchor="end" fill="#333" font-size="9">eth1</text>
+                <circle cx="540" cy="250" r="5" fill="white"/>
+                <text x="525" y="254" text-anchor="end" fill="#333" font-size="9">eth2</text>
+                <circle cx="690" cy="200" r="5" fill="white"/>
+                <text x="705" y="204" text-anchor="start" fill="#333" font-size="9">eth3</text>
 
-                <line x1="430" y1="150" x2="540" y2="150" stroke="#333" stroke-width="2"/>
-                <line x1="430" y1="250" x2="540" y2="250" stroke="#333" stroke-width="2"/>
-                <text x="485" y="140" text-anchor="middle" font-size="11">eth1</text>
-                <text x="485" y="240" text-anchor="middle" font-size="11">eth2</text>
+                <!-- Receiver PC -->
+                <rect x="820" y="150" width="120" height="100" fill="#dc3545" rx="10"/>
+                <text x="880" y="185" text-anchor="middle" fill="white" font-size="13" font-weight="bold">Receiver PC</text>
+                <text x="880" y="205" text-anchor="middle" fill="white" font-size="11">10.0.100.2</text>
+                <text x="880" y="225" text-anchor="middle" fill="white" font-size="10">Traffic Recv</text>
+                <text x="880" y="240" text-anchor="middle" fill="white" font-size="9">enp15s0</text>
 
-                <text x="485" y="320" text-anchor="middle" font-size="12" fill="#666">Duplicated Flows</text>
-                <text x="615" y="340" text-anchor="middle" font-size="12" fill="#666">Single Output</text>
+                <!-- Connection lines -->
+                <!-- Sender PC to Sender Board -->
+                <line x1="170" y1="200" x2="260" y2="200" stroke="#4ade80" stroke-width="3"/>
+                <text x="215" y="192" text-anchor="middle" font-size="10" fill="#333">Single Flow</text>
+                <text x="215" y="215" text-anchor="middle" font-size="9" fill="#666">IPv4/UDP</text>
+
+                <!-- Sender Board to Receiver Board (Path 1) -->
+                <line x1="410" y1="150" x2="540" y2="150" stroke="#f59e0b" stroke-width="3"/>
+                <text x="475" y="142" text-anchor="middle" font-size="10" fill="#333">Path 1</text>
+                <text x="475" y="162" text-anchor="middle" font-size="9" fill="#666">R-TAG 0xF1C1</text>
+
+                <!-- Sender Board to Receiver Board (Path 2) -->
+                <line x1="410" y1="250" x2="540" y2="250" stroke="#f59e0b" stroke-width="3"/>
+                <text x="475" y="242" text-anchor="middle" font-size="10" fill="#333">Path 2</text>
+                <text x="475" y="262" text-anchor="middle" font-size="9" fill="#666">R-TAG 0xF1C1</text>
+
+                <!-- Receiver Board to Receiver PC -->
+                <line x1="690" y1="200" x2="820" y2="200" stroke="#4ade80" stroke-width="3"/>
+                <text x="755" y="192" text-anchor="middle" font-size="10" fill="#333">Deduplicated</text>
+                <text x="755" y="215" text-anchor="middle" font-size="9" fill="#666">Single Stream</text>
+
+                <!-- Data flow animations -->
+                <circle cx="215" cy="200" r="3" fill="#4ade80">
+                    <animate attributeName="cx" from="170" to="260" dur="2s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="475" cy="150" r="3" fill="#f59e0b">
+                    <animate attributeName="cx" from="410" to="540" dur="2s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="475" cy="250" r="3" fill="#f59e0b">
+                    <animate attributeName="cx" from="410" to="540" dur="2.1s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="755" cy="200" r="3" fill="#4ade80">
+                    <animate attributeName="cx" from="690" to="820" dur="2s" repeatCount="indefinite"/>
+                </circle>
+
+                <!-- Legend -->
+                <text x="500" y="340" text-anchor="middle" font-size="14" fill="#333" font-weight="bold">2 PCs + 2 Boards Configuration</text>
+                <text x="500" y="360" text-anchor="middle" font-size="11" fill="#666">Frame Duplication at Sender, Elimination at Receiver</text>
+                <text x="500" y="380" text-anchor="middle" font-size="10" fill="#999">100% Redundancy, 99.986% Elimination Rate</text>
             </svg>
         </div>
     </div>

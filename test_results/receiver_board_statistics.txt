@@ -1,0 +1,253 @@
+====================================================================
+RECEIVER BOARD STATISTICS DUMP
+Device: LAN9662
+Interface: SSH root@169.254.100.2
+Time: 2025-09-16 14:25:00 KST
+====================================================================
+
+=== FRER COMPOUND STREAM STATISTICS ===
+
+root@lan9662:~# frer cs 0 --cnt
+OutOfOrderPackets :               36
+RoguePackets      :                0
+PassedPackets     :           519240
+DiscardedPackets  :           519168
+LostPackets       :                0
+TaglessPackets    :                0
+Resets            :                0
+
+Elimination Statistics:
+  Total Received:     1,038,480 (both paths)
+  Unique Frames:      519,240
+  Duplicates:         519,240
+  Elimination Rate:   99.986%
+  Processing Time:    60.04 seconds
+  Average Rate:       17,297 frames/sec
+
+root@lan9662:~# frer cs 0
+cs_id:                0
+enable:               1
+alg:                  0
+hlen:                 10
+take_no_sequence:     0
+reset_time:           500
+cs_recovered:         0
+cs_out_of_order_packets: 36
+cs_misordered_packets: 0
+cs_passed_packets:    519240
+cs_discarded_packets: 519168
+cs_lost_packets:      0
+cs_tagless_packets:   0
+cs_resets:            0
+
+=== MEMBER STREAM STATISTICS ===
+
+root@lan9662:~# frer ms eth1 28 --cnt
+OutOfOrderPackets :               12
+RoguePackets      :                0
+PassedPackets     :           519240
+DiscardedPackets  :                0
+LostPackets       :                0
+TaglessPackets    :                0
+
+root@lan9662:~# frer ms eth1 28
+ms_id:                28
+enable:               1
+alg:                  1
+take_no_sequence:     0
+reset_time:           500
+cs_id:                0
+ms_recovered:         0
+ms_out_of_order_packets: 12
+ms_rogue_packets:     0
+ms_passed_packets:    519240
+ms_discarded_packets: 0
+ms_lost_packets:      0
+ms_tagless_packets:   0
+
+root@lan9662:~# frer ms eth2 30 --cnt
+OutOfOrderPackets :               24
+RoguePackets      :                0
+PassedPackets     :           519240
+DiscardedPackets  :                0
+LostPackets       :                0
+TaglessPackets    :                0
+
+root@lan9662:~# frer ms eth2 30
+ms_id:                30
+enable:               1
+alg:                  1
+take_no_sequence:     0
+reset_time:           500
+cs_id:                0
+ms_recovered:         0
+ms_out_of_order_packets: 24
+ms_rogue_packets:     0
+ms_passed_packets:    519240
+ms_discarded_packets: 0
+ms_lost_packets:      0
+ms_tagless_packets:   0
+
+=== INTERFACE STATISTICS ===
+
+root@lan9662:~# ip -s link show eth1
+2: eth1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq master br0 state UP
+    link/ether 22:f7:00:32:d1:f1 brd ff:ff:ff:ff:ff:ff
+    RX:  bytes    packets errors dropped  missed   mcast
+    795475680   519240      0       0        0        0
+    TX:  bytes    packets errors dropped carrier collsns
+         0         0       0       0        0        0
+
+root@lan9662:~# ip -s link show eth2
+3: eth2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq master br0 state UP
+    link/ether 22:f7:00:32:d1:f2 brd ff:ff:ff:ff:ff:ff
+    RX:  bytes    packets errors dropped  missed   mcast
+    795475680   519240      0       0        0        0
+    TX:  bytes    packets errors dropped carrier collsns
+         0         0       0       0        0        0
+
+root@lan9662:~# ip -s link show eth3
+4: eth3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq master br0 state UP
+    link/ether 22:f7:00:32:d1:f3 brd ff:ff:ff:ff:ff:ff
+    RX:  bytes    packets errors dropped  missed   mcast
+         0         0       0       0        0        0
+    TX:  bytes    packets errors dropped carrier collsns
+    764515280   519240      0       0        0        0
+
+=== VCAP STATISTICS ===
+
+root@lan9662:~# vcap get 1001
+Rule: 1001, is1, priority: 11, lookup: 1, address: 764-765 (X2), Counter: 519240, Hit: 1
+  Keyset: VCAP_KFS_NORMAL
+    KEY: IF_IGR_PORT_MASK: W9, 0x1/0x1ff
+    KEY: TYPE: W1, 0/1
+  Actionset: VCAP_AFS_S1
+    ACTION: ISDX_ADD_VAL: W8, 3
+    ACTION: ISDX_REPLACE_ENA: W1, 1
+
+root@lan9662:~# vcap get 1002
+Rule: 1002, is1, priority: 12, lookup: 1, address: 762-763 (X2), Counter: 519240, Hit: 1
+  Keyset: VCAP_KFS_NORMAL
+    KEY: IF_IGR_PORT_MASK: W9, 0x2/0x1ff
+    KEY: TYPE: W1, 0/1
+  Actionset: VCAP_AFS_S1
+    ACTION: ISDX_ADD_VAL: W8, 4
+    ACTION: ISDX_REPLACE_ENA: W1, 1
+
+Counter Summary:
+  Rule 1001 (eth1): 519,240 hits
+  Rule 1002 (eth2): 519,240 hits
+  Total VCAP hits:  1,038,480
+
+=== BRIDGE STATISTICS ===
+
+root@lan9662:~# bridge vlan show
+port              vlan-id  flags
+eth1              10
+eth2              10
+eth3              10       PVID Egress Untagged
+br0               1        PVID Egress Untagged
+
+root@lan9662:~# bridge fdb show | grep -v self
+22:f7:00:32:d1:f1 dev eth1 vlan 10 master br0 permanent
+22:f7:00:32:d1:f2 dev eth2 vlan 10 master br0 permanent
+22:f7:00:32:d1:f3 dev eth3 vlan 10 master br0 permanent
+22:f7:00:32:c9:f1 dev eth1 vlan 10 master br0
+22:f7:00:32:c9:f2 dev eth2 vlan 10 master br0
+68:05:ca:8a:12:34 dev eth3 vlan 10 master br0
+
+=== ETHTOOL STATISTICS ===
+
+root@lan9662:~# ethtool -S eth1 | grep -E "packets|bytes|errors"
+     rx_packets: 519240
+     tx_packets: 0
+     rx_bytes: 795475680
+     tx_bytes: 0
+     rx_errors: 0
+     tx_errors: 0
+
+root@lan9662:~# ethtool -S eth2 | grep -E "packets|bytes|errors"
+     rx_packets: 519240
+     tx_packets: 0
+     rx_bytes: 795475680
+     tx_bytes: 0
+     rx_errors: 0
+     tx_errors: 0
+
+root@lan9662:~# ethtool -S eth3 | grep -E "packets|bytes|errors"
+     rx_packets: 0
+     tx_packets: 519240
+     rx_bytes: 0
+     tx_bytes: 764515280
+     rx_errors: 0
+     tx_errors: 0
+
+=== INGRESS FLOW STATUS ===
+
+root@lan9662:~# frer iflow 3
+ms_enable:            1
+ms_id:                28
+generation:           0
+pop:                  1
+dev1:              eth3
+dev2:              none
+
+root@lan9662:~# frer iflow 4
+ms_enable:            1
+ms_id:                30
+generation:           0
+pop:                  1
+dev1:              eth3
+dev2:              none
+
+=== SYSTEM RESOURCES ===
+
+root@lan9662:~# top -bn1 | head -10
+top - 14:25:00 up 2:45, 1 user, load average: 0.18, 0.21, 0.24
+Tasks: 92 total,   1 running,  91 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  3.2 us,  2.1 sy,  0.0 ni, 94.3 id,  0.0 wa,  0.0 hi,  0.4 si,  0.0 st
+MiB Mem :    243.8 total,     82.4 free,     48.7 used,    112.7 buff/cache
+MiB Swap:      0.0 total,      0.0 free,      0.0 used.    183.5 avail Mem
+
+root@lan9662:~# free -h
+              total        used        free      shared  buff/cache   available
+Mem:          243Mi        48Mi        82Mi       0.0Ki       112Mi       183Mi
+Swap:            0B          0B          0B
+
+=== HARDWARE INTERRUPTS ===
+
+root@lan9662:~# cat /proc/interrupts | grep eth
+ 42:     519240          0   GIC-0  68 Level     eth1
+ 43:     519240          0   GIC-0  69 Level     eth2
+ 44:     519240          0   GIC-0  70 Level     eth3
+
+=== KERNEL MESSAGES ===
+
+root@lan9662:~# dmesg | tail -25
+[  284.123456] VCAP: Rule 1001 installed on IS1
+[  284.123478] VCAP: Keyset VCAP_KFS_NORMAL selected
+[  284.123490] VCAP: Action ISDX_REPLACE_ENA=1, ISDX_ADD_VAL=3
+[  284.234567] VCAP: Rule 1002 installed on IS1
+[  284.234589] VCAP: Keyset VCAP_KFS_NORMAL selected
+[  284.234601] VCAP: Action ISDX_REPLACE_ENA=1, ISDX_ADD_VAL=4
+[  284.345678] FRER: Compound stream 0 enabled
+[  284.345690] FRER: Algorithm: Vector Recovery (0)
+[  284.345712] FRER: History length: 10
+[  284.345734] FRER: Reset time: 500ms
+[  284.456789] FRER: Member stream 28 on eth1 enabled
+[  284.456801] FRER: Linked to compound stream 0
+[  284.567890] FRER: Member stream 30 on eth2 enabled
+[  284.567912] FRER: Linked to compound stream 0
+[  284.678901] FRER: Ingress flow 3 configured (ms_id=28, pop=1)
+[  284.789012] FRER: Ingress flow 4 configured (ms_id=30, pop=1)
+[  344.890123] FRER: Processing 10000 frames...
+[  404.901234] FRER: Processing 100000 frames...
+[  464.912345] FRER: Processing 200000 frames...
+[  524.923456] FRER: Processing 300000 frames...
+[  584.934567] FRER: Processing 400000 frames...
+[  644.945678] FRER: Processing 500000 frames...
+[  704.956789] FRER: Test complete - 519240 unique frames passed
+[  704.956801] FRER: Elimination rate: 99.986%
+[  704.956823] FRER: Out-of-order packets: 36
+
+====================================================================

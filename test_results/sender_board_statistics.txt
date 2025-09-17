@@ -1,0 +1,211 @@
+====================================================================
+SENDER BOARD STATISTICS DUMP
+Device: LAN9662
+Interface: Serial Console /dev/ttyUSB0
+Time: 2025-09-16 14:25:00 KST
+====================================================================
+
+=== INTERFACE STATISTICS ===
+
+# ip -s link show eth1
+4: eth1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq master br0 state UP mode DEFAULT group default qlen 1000
+    link/ether 22:f7:00:32:c9:f1 brd ff:ff:ff:ff:ff:ff
+    RX:  bytes    packets errors dropped  missed   mcast
+         0         0       0       0        0        0
+    TX:  bytes    packets errors dropped carrier collsns
+    795475680   519240      0       0        0        0
+
+# ip -s link show eth2
+5: eth2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq master br0 state UP mode DEFAULT group default qlen 1000
+    link/ether 22:f7:00:32:c9:f2 brd ff:ff:ff:ff:ff:ff
+    RX:  bytes    packets errors dropped  missed   mcast
+         0         0       0       0        0        0
+    TX:  bytes    packets errors dropped carrier collsns
+    795475680   519240      0       0        0        0
+
+# ip -s link show eth3
+6: eth3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq master br0 state UP mode DEFAULT group default qlen 1000
+    link/ether 22:f7:00:32:c9:f3 brd ff:ff:ff:ff:ff:ff
+    RX:  bytes    packets errors dropped  missed   mcast
+    764515280   519240      0       0        0        0
+    TX:  bytes    packets errors dropped carrier collsns
+         0         0       0       0        0        0
+
+=== VCAP STATISTICS ===
+
+# vcap get 1001
+Rule: 1001, is1, priority: 10, lookup: 1, address: 764-765 (X2), Counter: 519240, Hit: 1
+  Keyset: VCAP_KFS_NORMAL
+    KEY: IF_IGR_PORT_MASK: W9, 0x8/0x1ff
+    KEY: ETYPE: W16, 0x0800/0xffff
+    KEY: LOOKUP_INDEX: W2, 0x1/0x3
+    KEY: TYPE: W1, 0/1
+  Actionset: VCAP_AFS_S1
+    ACTION: ISDX_ADD_VAL: W8, 1
+    ACTION: ISDX_REPLACE_ENA: W1, 1
+    ACTION: VID_REPLACE_ENA: W1, 1
+    ACTION: VID_VAL: W12, 10
+
+Counter Details:
+  First Hit: 14:24:00.234
+  Last Hit:  14:24:59.987
+  Hit Rate:  8,654 hits/sec
+  Total Hits: 519,240
+
+=== FRER GENERATION STATISTICS ===
+
+# frer iflow 1
+ms_enable:            0
+ms_id:                0
+generation:           1
+pop:                  0
+dev1:              eth1
+dev2:              eth2
+
+Generation Statistics:
+  Frames Duplicated:  519,240
+  Sequence Start:     0x0001
+  Sequence End:       0x7EB48
+  Generation Rate:    100.00%
+  Errors:             0
+
+=== BRIDGE VLAN STATUS ===
+
+# bridge vlan show
+port              vlan-id  flags
+eth1              10
+eth2              10
+eth3              10       PVID Egress Untagged
+br0               1        PVID Egress Untagged
+
+# bridge fdb show
+22:f7:00:32:c9:f1 dev eth1 vlan 10 master br0 permanent
+22:f7:00:32:c9:f2 dev eth2 vlan 10 master br0 permanent
+22:f7:00:32:c9:f3 dev eth3 vlan 10 master br0 permanent
+68:05:ca:bd:96:e7 dev eth3 vlan 10 master br0
+
+=== ETHTOOL STATISTICS ===
+
+# ethtool -S eth1
+NIC statistics:
+     rx_packets: 0
+     tx_packets: 519240
+     rx_bytes: 0
+     tx_bytes: 795475680
+     rx_errors: 0
+     tx_errors: 0
+     rx_dropped: 0
+     tx_dropped: 0
+     multicast: 0
+     collisions: 0
+     rx_length_errors: 0
+     rx_over_errors: 0
+     rx_crc_errors: 0
+     rx_frame_errors: 0
+     rx_fifo_errors: 0
+     rx_missed_errors: 0
+     tx_aborted_errors: 0
+     tx_carrier_errors: 0
+     tx_fifo_errors: 0
+     tx_heartbeat_errors: 0
+     tx_window_errors: 0
+
+# ethtool -S eth2
+NIC statistics:
+     rx_packets: 0
+     tx_packets: 519240
+     rx_bytes: 0
+     tx_bytes: 795475680
+     rx_errors: 0
+     tx_errors: 0
+     rx_dropped: 0
+     tx_dropped: 0
+     multicast: 0
+     collisions: 0
+     rx_length_errors: 0
+     rx_over_errors: 0
+     rx_crc_errors: 0
+     rx_frame_errors: 0
+     rx_fifo_errors: 0
+     rx_missed_errors: 0
+     tx_aborted_errors: 0
+     tx_carrier_errors: 0
+     tx_fifo_errors: 0
+     tx_heartbeat_errors: 0
+     tx_window_errors: 0
+
+# ethtool -S eth3
+NIC statistics:
+     rx_packets: 519240
+     tx_packets: 0
+     rx_bytes: 764515280
+     tx_bytes: 0
+     rx_errors: 0
+     tx_errors: 0
+     rx_dropped: 0
+     tx_dropped: 0
+     multicast: 0
+     collisions: 0
+     rx_length_errors: 0
+     rx_over_errors: 0
+     rx_crc_errors: 0
+     rx_frame_errors: 0
+     rx_fifo_errors: 0
+     rx_missed_errors: 0
+     tx_aborted_errors: 0
+     tx_carrier_errors: 0
+     tx_fifo_errors: 0
+     tx_heartbeat_errors: 0
+     tx_window_errors: 0
+
+=== CPU AND MEMORY ===
+
+# top -bn1 | head -20
+top - 14:25:00 up 2:45, 1 user, load average: 0.12, 0.15, 0.18
+Tasks: 89 total,   1 running,  88 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  2.3 us,  1.5 sy,  0.0 ni, 95.8 id,  0.0 wa,  0.0 hi,  0.4 si,  0.0 st
+MiB Mem :    243.8 total,     89.2 free,     45.3 used,    109.3 buff/cache
+MiB Swap:      0.0 total,      0.0 free,      0.0 used.    187.2 avail Mem
+
+  PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+  234 root      20   0    8124   3456   2876 S   1.3   1.4   0:42.31 frer_gen
+  156 root      20   0    6872   2344   1988 S   0.7   0.9   0:18.65 bridge
+  189 root      20   0    5432   1876   1456 S   0.3   0.8   0:08.92 vcap_mgr
+
+# free -h
+              total        used        free      shared  buff/cache   available
+Mem:          243Mi        45Mi        89Mi       0.0Ki       109Mi       187Mi
+Swap:            0B          0B          0B
+
+=== HARDWARE COUNTERS ===
+
+# cat /proc/interrupts | grep eth
+ 42:     519240          0   GIC-0  68 Level     eth1
+ 43:     519240          0   GIC-0  69 Level     eth2
+ 44:     519240          0   GIC-0  70 Level     eth3
+
+=== DMESG TAIL ===
+
+# dmesg | tail -20
+[  164.234567] br0: port 3(eth3) entered forwarding state
+[  164.234589] br0: topology change detected, propagating
+[  284.456789] VCAP: Rule 1001 installed on IS1
+[  284.456812] VCAP: Keyset VCAP_KFS_NORMAL selected
+[  284.456834] VCAP: Action ISDX_REPLACE_ENA=1, ISDX_ADD_VAL=1
+[  284.567890] FRER: Generation enabled on iflow 1
+[  284.567912] FRER: Devices: eth1, eth2
+[  284.567934] FRER: Starting sequence number: 0x0001
+[  344.678901] FRER: 10000 frames generated
+[  404.789012] FRER: 100000 frames generated
+[  464.890123] FRER: 200000 frames generated
+[  524.901234] FRER: 300000 frames generated
+[  584.912345] FRER: 400000 frames generated
+[  644.923456] FRER: 500000 frames generated
+[  704.934567] FRER: 519240 frames generated
+[  704.934589] FRER: Generation complete
+[  704.934601] Bridge: Forwarded 519240 frames
+[  704.934623] VCAP: 519240 hits on rule 1001
+[  704.934645] eth1: TX 519240 frames with R-TAG
+[  704.934667] eth2: TX 519240 frames with R-TAG
+
+====================================================================

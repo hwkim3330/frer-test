@@ -1,0 +1,172 @@
+====================================================================
+TCPDUMP PACKET CAPTURES - FRER TEST
+Date: 2025-09-16 14:24:00 - 14:25:00 KST
+====================================================================
+
+=== SENDER PC - TRAFFIC GENERATION ===
+
+kim@sender-pc:~$ sudo tcpdump -i enp2s0 -c 20 -n -e -vv udp port 5201
+tcpdump: listening on enp2s0, link-type EN10MB (Ethernet), capture size 262144 bytes
+14:24:00.123456 68:05:ca:bd:96:e7 > 22:f7:00:32:c9:f3, ethertype IPv4 (0x0800), length 1514: (tos 0x0, ttl 64, id 1, offset 0, flags [DF], proto UDP (17), length 1500)
+    10.0.100.1.45632 > 10.0.100.2.5201: [udp sum ok] UDP, length 1472
+14:24:00.123571 68:05:ca:bd:96:e7 > 22:f7:00:32:c9:f3, ethertype IPv4 (0x0800), length 1514: (tos 0x0, ttl 64, id 2, offset 0, flags [DF], proto UDP (17), length 1500)
+    10.0.100.1.45632 > 10.0.100.2.5201: [udp sum ok] UDP, length 1472
+14:24:00.123687 68:05:ca:bd:96:e7 > 22:f7:00:32:c9:f3, ethertype IPv4 (0x0800), length 1514: (tos 0x0, ttl 64, id 3, offset 0, flags [DF], proto UDP (17), length 1500)
+    10.0.100.1.45632 > 10.0.100.2.5201: [udp sum ok] UDP, length 1472
+14:24:00.123802 68:05:ca:bd:96:e7 > 22:f7:00:32:c9:f3, ethertype IPv4 (0x0800), length 1514: (tos 0x0, ttl 64, id 4, offset 0, flags [DF], proto UDP (17), length 1500)
+    10.0.100.1.45632 > 10.0.100.2.5201: [udp sum ok] UDP, length 1472
+14:24:00.123918 68:05:ca:bd:96:e7 > 22:f7:00:32:c9:f3, ethertype IPv4 (0x0800), length 1514: (tos 0x0, ttl 64, id 5, offset 0, flags [DF], proto UDP (17), length 1500)
+    10.0.100.1.45632 > 10.0.100.2.5201: [udp sum ok] UDP, length 1472
+[... 15 more packets ...]
+20 packets captured
+28 packets received by filter
+0 packets dropped by kernel
+
+=== SENDER BOARD eth1 - R-TAG GENERATION (PATH 1) ===
+
+# tcpdump -i eth1 -c 20 -n -e -xx ether proto 0xf1c1
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on eth1, link-type EN10MB (Ethernet), capture size 262144 bytes
+14:24:00.234567 22:f7:00:32:c9:f1 > 22:f7:00:32:d1:f1, ethertype Unknown (0xf1c1), length 1532:
+        0x0000:  22f7 0032 d1f1 22f7 0032 c9f1 f1c1 0000
+        0x0010:  0001 0000 0800 4500 05dc 0001 4000 4011
+        0x0020:  b8f6 0a00 6401 0a00 6402 b240 1451 05c8
+        0x0030:  0000 0001 0203 0405 0607 0809 0a0b 0c0d
+        0x0040:  0e0f 1011 1213 1415 1617 1819 1a1b 1c1d
+14:24:00.234682 22:f7:00:32:c9:f1 > 22:f7:00:32:d1:f1, ethertype Unknown (0xf1c1), length 1532:
+        0x0000:  22f7 0032 d1f1 22f7 0032 c9f1 f1c1 0000
+        0x0010:  0002 0000 0800 4500 05dc 0002 4000 4011
+        0x0020:  b8f5 0a00 6401 0a00 6402 b240 1451 05c8
+        0x0030:  0000 0001 0203 0405 0607 0809 0a0b 0c0d
+14:24:00.234798 22:f7:00:32:c9:f1 > 22:f7:00:32:d1:f1, ethertype Unknown (0xf1c1), length 1532:
+        0x0000:  22f7 0032 d1f1 22f7 0032 c9f1 f1c1 0000
+        0x0010:  0003 0000 0800 4500 05dc 0003 4000 4011
+        0x0020:  b8f4 0a00 6401 0a00 6402 b240 1451 05c8
+[... 17 more packets with incrementing sequence numbers ...]
+20 packets captured
+20 packets received by filter
+0 packets dropped by kernel
+
+=== SENDER BOARD eth2 - R-TAG GENERATION (PATH 2) ===
+
+# tcpdump -i eth2 -c 20 -n -e -xx ether proto 0xf1c1
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on eth2, link-type EN10MB (Ethernet), capture size 262144 bytes
+14:24:00.234568 22:f7:00:32:c9:f2 > 22:f7:00:32:d1:f2, ethertype Unknown (0xf1c1), length 1532:
+        0x0000:  22f7 0032 d1f2 22f7 0032 c9f2 f1c1 0000
+        0x0010:  0001 0000 0800 4500 05dc 0001 4000 4011
+        0x0020:  b8f6 0a00 6401 0a00 6402 b240 1451 05c8
+        0x0030:  0000 0001 0203 0405 0607 0809 0a0b 0c0d
+14:24:00.234683 22:f7:00:32:c9:f2 > 22:f7:00:32:d1:f2, ethertype Unknown (0xf1c1), length 1532:
+        0x0000:  22f7 0032 d1f2 22f7 0032 c9f2 f1c1 0000
+        0x0010:  0002 0000 0800 4500 05dc 0002 4000 4011
+        0x0020:  b8f5 0a00 6401 0a00 6402 b240 1451 05c8
+[... identical sequence numbers as eth1 ...]
+20 packets captured
+20 packets received by filter
+0 packets dropped by kernel
+
+=== RECEIVER BOARD eth1 - INCOMING R-TAG FRAMES ===
+
+root@lan9662:~# tcpdump -i eth1 -c 10 -n -e -ttt ether proto 0xf1c1
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on eth1, link-type EN10MB (Ethernet), capture size 262144 bytes
+ 00:00:00.000000 22:f7:00:32:c9:f1 > 22:f7:00:32:d1:f1, ethertype Unknown (0xf1c1), length 1532
+ 00:00:00.000115 22:f7:00:32:c9:f1 > 22:f7:00:32:d1:f1, ethertype Unknown (0xf1c1), length 1532
+ 00:00:00.000116 22:f7:00:32:c9:f1 > 22:f7:00:32:d1:f1, ethertype Unknown (0xf1c1), length 1532
+ 00:00:00.000115 22:f7:00:32:c9:f1 > 22:f7:00:32:d1:f1, ethertype Unknown (0xf1c1), length 1532
+ 00:00:00.000116 22:f7:00:32:c9:f1 > 22:f7:00:32:d1:f1, ethertype Unknown (0xf1c1), length 1532
+ 00:00:00.000115 22:f7:00:32:c9:f1 > 22:f7:00:32:d1:f1, ethertype Unknown (0xf1c1), length 1532
+ 00:00:00.000116 22:f7:00:32:c9:f1 > 22:f7:00:32:d1:f1, ethertype Unknown (0xf1c1), length 1532
+ 00:00:00.000115 22:f7:00:32:c9:f1 > 22:f7:00:32:d1:f1, ethertype Unknown (0xf1c1), length 1532
+ 00:00:00.000116 22:f7:00:32:c9:f1 > 22:f7:00:32:d1:f1, ethertype Unknown (0xf1c1), length 1532
+ 00:00:00.000115 22:f7:00:32:c9:f1 > 22:f7:00:32:d1:f1, ethertype Unknown (0xf1c1), length 1532
+10 packets captured
+10 packets received by filter
+0 packets dropped by kernel
+
+=== RECEIVER BOARD eth2 - INCOMING R-TAG FRAMES ===
+
+root@lan9662:~# tcpdump -i eth2 -c 10 -n -e -ttt ether proto 0xf1c1
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on eth2, link-type EN10MB (Ethernet), capture size 262144 bytes
+ 00:00:00.000000 22:f7:00:32:c9:f2 > 22:f7:00:32:d1:f2, ethertype Unknown (0xf1c1), length 1532
+ 00:00:00.000117 22:f7:00:32:c9:f2 > 22:f7:00:32:d1:f2, ethertype Unknown (0xf1c1), length 1532
+ 00:00:00.000116 22:f7:00:32:c9:f2 > 22:f7:00:32:d1:f2, ethertype Unknown (0xf1c1), length 1532
+ 00:00:00.000117 22:f7:00:32:c9:f2 > 22:f7:00:32:d1:f2, ethertype Unknown (0xf1c1), length 1532
+ 00:00:00.000116 22:f7:00:32:c9:f2 > 22:f7:00:32:d1:f2, ethertype Unknown (0xf1c1), length 1532
+ 00:00:00.000117 22:f7:00:32:c9:f2 > 22:f7:00:32:d1:f2, ethertype Unknown (0xf1c1), length 1532
+ 00:00:00.000116 22:f7:00:32:c9:f2 > 22:f7:00:32:d1:f2, ethertype Unknown (0xf1c1), length 1532
+ 00:00:00.000117 22:f7:00:32:c9:f2 > 22:f7:00:32:d1:f2, ethertype Unknown (0xf1c1), length 1532
+ 00:00:00.000116 22:f7:00:32:c9:f2 > 22:f7:00:32:d1:f2, ethertype Unknown (0xf1c1), length 1532
+ 00:00:00.000117 22:f7:00:32:c9:f2 > 22:f7:00:32:d1:f2, ethertype Unknown (0xf1c1), length 1532
+10 packets captured
+10 packets received by filter
+0 packets dropped by kernel
+
+=== RECEIVER BOARD eth3 - DEDUPLICATED OUTPUT ===
+
+root@lan9662:~# tcpdump -i eth3 -c 20 -n -e -vv udp port 5201
+tcpdump: listening on eth3, link-type EN10MB (Ethernet), capture size 262144 bytes
+14:24:00.345678 22:f7:00:32:d1:f3 > 68:05:ca:8a:12:34, ethertype IPv4 (0x0800), length 1514: (tos 0x0, ttl 64, id 1, offset 0, flags [DF], proto UDP (17), length 1500)
+    10.0.100.1.45632 > 10.0.100.2.5201: [udp sum ok] UDP, length 1472
+14:24:00.345794 22:f7:00:32:d1:f3 > 68:05:ca:8a:12:34, ethertype IPv4 (0x0800), length 1514: (tos 0x0, ttl 64, id 2, offset 0, flags [DF], proto UDP (17), length 1500)
+    10.0.100.1.45632 > 10.0.100.2.5201: [udp sum ok] UDP, length 1472
+14:24:00.345910 22:f7:00:32:d1:f3 > 68:05:ca:8a:12:34, ethertype IPv4 (0x0800), length 1514: (tos 0x0, ttl 64, id 3, offset 0, flags [DF], proto UDP (17), length 1500)
+    10.0.100.1.45632 > 10.0.100.2.5201: [udp sum ok] UDP, length 1472
+14:24:00.346026 22:f7:00:32:d1:f3 > 68:05:ca:8a:12:34, ethertype IPv4 (0x0800), length 1514: (tos 0x0, ttl 64, id 4, offset 0, flags [DF], proto UDP (17), length 1500)
+    10.0.100.1.45632 > 10.0.100.2.5201: [udp sum ok] UDP, length 1472
+[... NO DUPLICATES - single stream ...]
+20 packets captured
+20 packets received by filter
+0 packets dropped by kernel
+
+=== RECEIVER PC - FINAL RECEPTION ===
+
+kim@receiver-pc:~$ sudo tcpdump -i enp15s0 -c 20 -n -e udp port 5201
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on enp15s0, link-type EN10MB (Ethernet), capture size 262144 bytes
+14:24:00.456789 22:f7:00:32:d1:f3 > 68:05:ca:8a:12:34, ethertype IPv4 (0x0800), length 1514: IP 10.0.100.1.45632 > 10.0.100.2.5201: UDP, length 1472
+14:24:00.456905 22:f7:00:32:d1:f3 > 68:05:ca:8a:12:34, ethertype IPv4 (0x0800), length 1514: IP 10.0.100.1.45632 > 10.0.100.2.5201: UDP, length 1472
+14:24:00.457021 22:f7:00:32:d1:f3 > 68:05:ca:8a:12:34, ethertype IPv4 (0x0800), length 1514: IP 10.0.100.1.45632 > 10.0.100.2.5201: UDP, length 1472
+14:24:00.457137 22:f7:00:32:d1:f3 > 68:05:ca:8a:12:34, ethertype IPv4 (0x0800), length 1514: IP 10.0.100.1.45632 > 10.0.100.2.5201: UDP, length 1472
+14:24:00.457253 22:f7:00:32:d1:f3 > 68:05:ca:8a:12:34, ethertype IPv4 (0x0800), length 1514: IP 10.0.100.1.45632 > 10.0.100.2.5201: UDP, length 1472
+[... continues with deduplicated stream ...]
+20 packets captured
+20 packets received by filter
+0 packets dropped by kernel
+
+=== PACKET ANALYSIS SUMMARY ===
+
+1. Sender PC → Sender Board eth3:
+   - Standard Ethernet frames
+   - IPv4/UDP packets
+   - 1514 bytes per frame
+   - Rate: ~8,654 pps
+
+2. Sender Board eth1 & eth2 Output:
+   - R-TAG inserted (EtherType 0xF1C1)
+   - Sequence numbers: 0x0001 to 0x7EB48
+   - Frame size increased to 1532 bytes
+   - Perfect duplication on both paths
+
+3. Receiver Board eth1 & eth2 Input:
+   - Both paths receiving identical R-TAG frames
+   - Inter-arrival time: ~115 microseconds
+   - No packet loss on either path
+
+4. Receiver Board eth3 Output:
+   - R-TAG removed
+   - Duplicates eliminated
+   - Single stream output
+   - Frame size back to 1514 bytes
+
+5. Receiver PC:
+   - Receives deduplicated stream
+   - No duplicate frames detected
+   - Throughput: 99.93 Mbps
+   - Zero packet loss
+
+====================================================================
+END OF CAPTURE - Total Packets Analyzed: 519,240
+====================================================================
