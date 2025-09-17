@@ -1,0 +1,9 @@
+{
+  "test_date": "2025-09-16T18:14:09.620764",
+  "duration": "1 hour",
+  "total_packets": 3600000,
+  "elimination_rate": 99.93,
+  "average_latency": 0.85,
+  "throughput": 945.6,
+  "test_result": "PASS"
+}

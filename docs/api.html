@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation - FRER Test Suite</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .main-container {
+            background: rgba(255,255,255,0.97);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 40px auto;
+            max-width: 1400px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+
+        .api-section {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .endpoint {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .method-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+
+        .method-get { background: #28a745; color: white; }
+        .method-post { background: #007bff; color: white; }
+        .method-put { background: #ffc107; color: #333; }
+        .method-delete { background: #dc3545; color: white; }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 15px 0;
+            position: relative;
+        }
+
+        .param-table {
+            width: 100%;
+            margin: 15px 0;
+        }
+
+        .param-table th {
+            background: #f0f0f0;
+            padding: 10px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .param-table td {
+            padding: 10px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .param-required {
+            color: #dc3545;
+            font-weight: 600;
+        }
+
+        .param-optional {
+            color: #6c757d;
+        }
+
+        .response-box {
+            background: #e8f5e9;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .error-box {
+            background: #ffebee;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .nav-pills .nav-link {
+            color: #666;
+            border-radius: 10px;
+            padding: 10px 20px;
+            margin-bottom: 10px;
+        }
+
+        .nav-pills .nav-link.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .example-tabs .nav-link {
+            padding: 8px 15px;
+            font-size: 14px;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: rgba(0,0,0,0.2); backdrop-filter: blur(10px);">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="bi bi-diagram-3-fill"></i> FRER Test Suite
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="index.html">Home</a>
+                <a class="nav-link" href="installation.html">Installation</a>
+                <a class="nav-link" href="configuration.html">Configuration</a>
+                <a class="nav-link" href="troubleshooting.html">Troubleshooting</a>
+                <a class="nav-link active" href="api.html">API</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <h1 class="mb-4"><i class="bi bi-code-slash"></i> API Documentation</h1>
+
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3">
+                <div class="sticky-top" style="top: 20px;">
+                    <h5 class="mb-3">API Sections</h5>
+                    <nav class="nav nav-pills flex-column">
+                        <a class="nav-link active" href="#python-api">Python API</a>
+                        <a class="nav-link" href="#cli-commands">CLI Commands</a>
+                        <a class="nav-link" href="#rest-api">REST API</a>
+                        <a class="nav-link" href="#data-structures">Data Structures</a>
+                        <a class="nav-link" href="#examples">Examples</a>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9">
+                <!-- Python API Section -->
+                <section id="python-api" class="api-section">
+                    <h2><i class="bi bi-file-earmark-code"></i> Python API</h2>
+
+                    <div class="endpoint">
+                        <h4>FRERController Class</h4>
+                        <p>Main class for controlling FRER operations on LAN9662 boards.</p>
+
+                        <h5>Constructor</h5>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i></button>
+                            <pre><code class="language-python">from frer_controller import FRERController
+
+# Initialize controller
+controller = FRERController(
+    serial_port="/dev/ttyUSB0",
+    baudrate=115200,
+    ssh_host="169.254.100.2",
+    ssh_user="root"
+)</code></pre>
+                        </div>
+
+                        <h5>Methods</h5>
+
+                        <h6><code>configure_sender()</code></h6>
+                        <p>Configure board as FRER sender with frame replication.</p>
+                        <table class="param-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Type</th>
+                                    <th>Required</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>vlan_id</td>
+                                    <td>int</td>
+                                    <td><span class="param-optional">Optional</span></td>
+                                    <td>VLAN ID (default: 10)</td>
+                                </tr>
+                                <tr>
+                                    <td>isdx</td>
+                                    <td>int</td>
+                                    <td><span class="param-optional">Optional</span></td>
+                                    <td>Ingress Service Index (default: 1)</td>
+                                </tr>
+                                <tr>
+                                    <td>output_ports</td>
+                                    <td>list</td>
+                                    <td><span class="param-optional">Optional</span></td>
+                                    <td>Output ports (default: ["eth1", "eth2"])</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i></button>
+                            <pre><code class="language-python"># Configure as sender
+result = controller.configure_sender(
+    vlan_id=10,
+    isdx=1,
+    output_ports=["eth1", "eth2"]
+)
+
+if result.success:
+    print(f"Sender configured: {result.message}")</code></pre>
+                        </div>
+
+                        <h6><code>configure_receiver()</code></h6>
+                        <p>Configure board as FRER receiver with duplicate elimination.</p>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i></button>
+                            <pre><code class="language-python"># Configure as receiver
+result = controller.configure_receiver(
+    vlan_id=10,
+    compound_stream_id=0,
+    member_streams=[
+        {"port": "eth1", "id": 28, "isdx": 3},
+        {"port": "eth2", "id": 30, "isdx": 4}
+    ]
+)</code></pre>
+                        </div>
+
+                        <h6><code>get_statistics()</code></h6>
+                        <p>Retrieve FRER statistics and performance metrics.</p>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i></button>
+                            <pre><code class="language-python"># Get current statistics
+stats = controller.get_statistics()
+
+print(f"Passed Packets: {stats.passed_packets}")
+print(f"Discarded Packets: {stats.discarded_packets}")
+print(f"Elimination Rate: {stats.elimination_rate:.2f}%")</code></pre>
+                        </div>
+
+                        <h6><code>start_traffic_test()</code></h6>
+                        <p>Start automated traffic generation and monitoring.</p>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i></button>
+                            <pre><code class="language-python"># Run traffic test
+test_result = controller.start_traffic_test(
+    duration=60,        # seconds
+    bitrate="100M",     # bits per second
+    packet_size=1518,   # bytes
+    monitor_interval=1  # seconds
+)
+
+# Access results
+for metric in test_result.metrics:
+    print(f"{metric.timestamp}: {metric.throughput} Mbps")</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="endpoint">
+                        <h4>VCAPManager Class</h4>
+                        <p>Manage VCAP rules for packet classification.</p>
+
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i></button>
+                            <pre><code class="language-python">from vcap_manager import VCAPManager
+
+vcap = VCAPManager(connection)
+
+# Add classification rule
+rule = vcap.add_rule(
+    rule_id=1001,
+    priority=10,
+    lookup=1,
+    keyset="VCAP_KFS_NORMAL",
+    keys={
+        "IF_IGR_PORT_MASK": (0x008, 0x1ff),
+        "ETYPE": (0x0800, 0xffff)
+    },
+    actions={
+        "ISDX_REPLACE_ENA": 1,
+        "ISDX_ADD_VAL": 1,
+        "VID_REPLACE_ENA": 1,
+        "VID_VAL": 10
+    }
+)
+
+# Get rule statistics
+stats = vcap.get_rule_stats(1001)
+print(f"Hit count: {stats.hit_count}")</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- CLI Commands Section -->
+                <section id="cli-commands" class="api-section">
+                    <h2><i class="bi bi-terminal"></i> CLI Commands</h2>
+
+                    <div class="endpoint">
+                        <h4>FRER Commands</h4>
+
+                        <h5>Compound Stream</h5>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i></button>
+                            <pre><code class="language-bash"># Configure compound stream
+frer cs <id> [options]
+  --enable <0|1>      Enable/disable stream
+  --alg <0|1>         Algorithm (0=Vector, 1=Match)
+  --hlen <n>          History length
+  --reset_time <ms>   Reset timeout
+  --take_no_seq <0|1> Accept untagged frames
+  --cnt               Show counters
+  --clr               Clear counters
+
+# Example
+frer cs 0 --enable 1 --alg 0 --hlen 10 --reset_time 500</code></pre>
+                        </div>
+
+                        <h5>Member Stream</h5>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i></button>
+                            <pre><code class="language-bash"># Configure member stream
+frer ms <dev> <ms_id> [options]
+  --enable <0|1>      Enable/disable stream
+  --alg <0|1>         Algorithm
+  --hlen <n>          History length
+  --reset_time <ms>   Reset timeout
+  --cs_id <id>        Compound stream ID
+  --cnt               Show counters
+  --clr               Clear counters
+
+# Example
+frer ms eth1 28 --enable 1 --alg 1 --reset_time 500 --cs_id 0</code></pre>
+                        </div>
+
+                        <h5>Ingress Flow</h5>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i></button>
+                            <pre><code class="language-bash"># Configure ingress flow
+frer iflow <isdx> [options]
+  --generation <0|1>  Enable generation
+  --ms_enable <0|1>   Enable member stream
+  --ms_id <id>        Member stream ID
+  --pop <0|1>         Remove R-TAG
+  --dev1 <port>       Primary output port
+  --dev2 <port>       Secondary output port
+
+# Examples
+frer iflow 1 --generation 1 --dev1 eth1 --dev2 eth2
+frer iflow 3 --ms_enable 1 --ms_id 28 --pop 1 --dev1 eth3</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="endpoint">
+                        <h4>VCAP Commands</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i></button>
+                            <pre><code class="language-bash"># Add VCAP rule
+vcap add <rule_id> <instance> <priority> <lookup> <keyset> \
+  [keys...] <actionset> [actions...]
+
+# Get rule information
+vcap get <rule_id>
+
+# Delete rule
+vcap del <rule_id>
+
+# Show VCAP instance details
+vcap -v <instance></code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- REST API Section -->
+                <section id="rest-api" class="api-section">
+                    <h2><i class="bi bi-globe"></i> REST API</h2>
+
+                    <div class="endpoint">
+                        <span class="method-badge method-get">GET</span>
+                        <strong>/api/v1/frer/statistics</strong>
+                        <p>Get current FRER statistics</p>
+
+                        <h5>Response</h5>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i></button>
+                            <pre><code class="language-json">{
+  "compound_stream": {
+    "id": 0,
+    "passed_packets": 1234567,
+    "discarded_packets": 1234321,
+    "lost_packets": 0,
+    "out_of_order_packets": 245,
+    "elimination_rate": 99.93
+  },
+  "member_streams": [
+    {
+      "port": "eth1",
+      "id": 28,
+      "received": 1234567,
+      "sequence_errors": 123
+    }
+  ],
+  "timestamp": "2025-09-16T10:30:00Z"
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="endpoint">
+                        <span class="method-badge method-post">POST</span>
+                        <strong>/api/v1/frer/configure</strong>
+                        <p>Configure FRER parameters</p>
+
+                        <h5>Request Body</h5>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i></button>
+                            <pre><code class="language-json">{
+  "role": "sender",
+  "vlan_id": 10,
+  "vcap_rules": [
+    {
+      "id": 1001,
+      "port_mask": "0x008",
+      "isdx": 1
+    }
+  ],
+  "frer": {
+    "generation": true,
+    "output_ports": ["eth1", "eth2"]
+  }
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="endpoint">
+                        <span class="method-badge method-post">POST</span>
+                        <strong>/api/v1/test/start</strong>
+                        <p>Start traffic test</p>
+
+                        <h5>Request Body</h5>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i></button>
+                            <pre><code class="language-json">{
+  "duration": 60,
+  "bitrate": "100M",
+  "packet_size": 1518,
+  "protocol": "udp",
+  "destination": "10.0.100.2"
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="endpoint">
+                        <span class="method-badge method-delete">DELETE</span>
+                        <strong>/api/v1/frer/reset</strong>
+                        <p>Reset all FRER configurations and clear counters</p>
+
+                        <h5>Response</h5>
+                        <div class="response-box">
+                            <code>200 OK</code> - Configuration reset successfully
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Data Structures Section -->
+                <section id="data-structures" class="api-section">
+                    <h2><i class="bi bi-diagram-3"></i> Data Structures</h2>
+
+                    <div class="endpoint">
+                        <h4>FRERStatistics</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i></button>
+                            <pre><code class="language-python">@dataclass
+class FRERStatistics:
+    passed_packets: int
+    discarded_packets: int
+    lost_packets: int
+    out_of_order_packets: int
+    rogue_packets: int
+    tagless_packets: int
+    resets: int
+    elimination_rate: float
+
+    @property
+    def total_received(self) -> int:
+        return self.passed_packets + self.discarded_packets</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="endpoint">
+                        <h4>VCAPRule</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i></button>
+                            <pre><code class="language-python">@dataclass
+class VCAPRule:
+    rule_id: int
+    instance: str
+    priority: int
+    lookup: int
+    keyset: str
+    keys: Dict[str, Tuple[int, int]]
+    actionset: str
+    actions: Dict[str, int]
+    hit_count: int = 0
+    counter: int = 0</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="endpoint">
+                        <h4>TestResult</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i></button>
+                            <pre><code class="language-python">class TestResult:
+    def __init__(self):
+        self.start_time: datetime
+        self.end_time: datetime
+        self.duration: float
+        self.packets_sent: int
+        self.packets_received: int
+        self.duplicates_eliminated: int
+        self.average_latency: float
+        self.throughput: float
+        self.metrics: List[Metric] = []
+
+    @property
+    def success_rate(self) -> float:
+        return (self.packets_received / self.packets_sent) * 100</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Examples Section -->
+                <section id="examples" class="api-section">
+                    <h2><i class="bi bi-code-square"></i> Complete Examples</h2>
+
+                    <div class="endpoint">
+                        <h4>Full Test Script</h4>
+                        <p>Complete example of running an automated FRER test.</p>
+
+                        <ul class="nav nav-tabs example-tabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#python-example">Python</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#bash-example">Bash</button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="python-example">
+                                <div class="code-block">
+                                    <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i></button>
+                                    <pre><code class="language-python">#!/usr/bin/env python3
+"""Complete FRER test example"""
+
+import time
+from frer_controller import FRERController
+from traffic_generator import TrafficGenerator
+
+def main():
+    # Initialize controllers
+    sender = FRERController("/dev/ttyUSB0", role="sender")
+    receiver = FRERController(ssh_host="169.254.100.2", role="receiver")
+
+    # Configure sender
+    sender.configure_sender(
+        vlan_id=10,
+        isdx=1,
+        output_ports=["eth1", "eth2"]
+    )
+
+    # Configure receiver
+    receiver.configure_receiver(
+        vlan_id=10,
+        compound_stream_id=0,
+        member_streams=[
+            {"port": "eth1", "id": 28, "isdx": 3},
+            {"port": "eth2", "id": 30, "isdx": 4}
+        ]
+    )
+
+    # Clear statistics
+    receiver.clear_statistics()
+
+    # Start traffic generation
+    traffic = TrafficGenerator("10.0.100.2")
+    traffic.start(bitrate="100M", duration=60)
+
+    # Monitor statistics
+    while traffic.is_running():
+        stats = receiver.get_statistics()
+        print(f"Elimination Rate: {stats.elimination_rate:.2f}%")
+        time.sleep(1)
+
+    # Get final results
+    final_stats = receiver.get_statistics()
+    print(f"\nTest Complete!")
+    print(f"Total Packets: {final_stats.total_received}")
+    print(f"Duplicates Eliminated: {final_stats.discarded_packets}")
+    print(f"Elimination Rate: {final_stats.elimination_rate:.2f}%")
+
+if __name__ == "__main__":
+    main()</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="bash-example">
+                                <div class="code-block">
+                                    <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i></button>
+                                    <pre><code class="language-bash">#!/bin/bash
+# Complete FRER test script
+
+# Configure sender board (via serial)
+cat << 'EOF' | tee /dev/ttyUSB0
+# Setup bridge and VLAN
+ip link add name br0 type bridge vlan_filtering 1
+ip link set br0 up
+bridge vlan add dev eth1 vid 10
+bridge vlan add dev eth2 vid 10
+bridge vlan add dev eth3 vid 10 pvid untagged
+
+# Configure VCAP
+vcap add 1001 is1 10 1 VCAP_KFS_NORMAL \
+  IF_IGR_PORT_MASK 0x008 0x1ff ETYPE 0x0800 = \
+  VCAP_AFS_S1 ISDX_REPLACE_ENA 1 ISDX_ADD_VAL 1
+
+# Setup FRER generation
+frer iflow 1 --generation 1 --dev1 eth1 --dev2 eth2
+EOF
+
+# Configure receiver board (via SSH)
+ssh root@169.254.100.2 << 'EOF'
+# Configure VCAP rules
+vcap add 1001 is1 11 1 VCAP_KFS_NORMAL \
+  IF_IGR_PORT_MASK 0x001 0x1ff \
+  VCAP_AFS_S1 ISDX_REPLACE_ENA 1 ISDX_ADD_VAL 3
+
+vcap add 1002 is1 12 1 VCAP_KFS_NORMAL \
+  IF_IGR_PORT_MASK 0x002 0x1ff \
+  VCAP_AFS_S1 ISDX_REPLACE_ENA 1 ISDX_ADD_VAL 4
+
+# Setup compound stream
+frer cs 0 --enable 1 --alg 0 --hlen 10 --reset_time 500
+
+# Configure member streams
+frer ms eth1 28 --enable 1 --alg 1 --reset_time 500 --cs_id 0
+frer ms eth2 30 --enable 1 --alg 1 --reset_time 500 --cs_id 0
+
+# Setup elimination flows
+frer iflow 3 --ms_enable 1 --ms_id 28 --pop 1 --dev1 eth3
+frer iflow 4 --ms_enable 1 --ms_id 30 --pop 1 --dev1 eth3
+
+# Clear counters
+frer cs 0 --clr
+EOF
+
+# Generate traffic
+iperf3 -c 10.0.100.2 -u -b 100M -t 60 &
+
+# Monitor statistics
+for i in {1..60}; do
+    ssh root@169.254.100.2 'frer cs 0 --cnt'
+    sleep 1
+done
+
+# Get final statistics
+ssh root@169.254.100.2 'frer cs 0 --cnt'</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="endpoint">
+                        <h4>Custom Monitoring Script</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="bi bi-clipboard"></i></button>
+                            <pre><code class="language-python">#!/usr/bin/env python3
+"""Real-time FRER monitoring with visualization"""
+
+import time
+import json
+from datetime import datetime
+import matplotlib.pyplot as plt
+from collections import deque
+
+class FRERMonitor:
+    def __init__(self, controller, window_size=60):
+        self.controller = controller
+        self.timestamps = deque(maxlen=window_size)
+        self.elimination_rates = deque(maxlen=window_size)
+        self.throughputs = deque(maxlen=window_size)
+
+    def update(self):
+        stats = self.controller.get_statistics()
+        metrics = self.controller.get_metrics()
+
+        self.timestamps.append(datetime.now())
+        self.elimination_rates.append(stats.elimination_rate)
+        self.throughputs.append(metrics.throughput)
+
+        return stats, metrics
+
+    def plot(self):
+        fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 8))
+
+        # Elimination rate plot
+        ax1.plot(self.timestamps, self.elimination_rates, 'b-')
+        ax1.set_ylabel('Elimination Rate (%)')
+        ax1.set_ylim(99, 100)
+        ax1.grid(True)
+
+        # Throughput plot
+        ax2.plot(self.timestamps, self.throughputs, 'g-')
+        ax2.set_ylabel('Throughput (Mbps)')
+        ax2.set_xlabel('Time')
+        ax2.grid(True)
+
+        plt.tight_layout()
+        return fig
+
+    def save_data(self, filename):
+        data = {
+            'timestamps': [t.isoformat() for t in self.timestamps],
+            'elimination_rates': list(self.elimination_rates),
+            'throughputs': list(self.throughputs)
+        }
+        with open(filename, 'w') as f:
+            json.dump(data, f, indent=2)
+
+# Usage
+monitor = FRERMonitor(controller)
+for _ in range(60):
+    stats, metrics = monitor.update()
+    print(f"Rate: {stats.elimination_rate:.2f}%, Throughput: {metrics.throughput:.1f} Mbps")
+    time.sleep(1)
+
+monitor.plot()
+monitor.save_data('monitoring_data.json')</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Error Codes -->
+                <div class="api-section">
+                    <h2><i class="bi bi-exclamation-triangle"></i> Error Codes</h2>
+                    <table class="param-table">
+                        <thead>
+                            <tr>
+                                <th>Code</th>
+                                <th>Message</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>E001</td>
+                                <td>Connection Failed</td>
+                                <td>Unable to connect to board via serial or SSH</td>
+                            </tr>
+                            <tr>
+                                <td>E002</td>
+                                <td>Invalid VCAP Rule</td>
+                                <td>VCAP keyset validation failed</td>
+                            </tr>
+                            <tr>
+                                <td>E003</td>
+                                <td>FRER Configuration Error</td>
+                                <td>Invalid FRER parameters or member stream ID</td>
+                            </tr>
+                            <tr>
+                                <td>E004</td>
+                                <td>No Statistics Available</td>
+                                <td>FRER counters not initialized or accessible</td>
+                            </tr>
+                            <tr>
+                                <td>E005</td>
+                                <td>Traffic Generation Failed</td>
+                                <td>Unable to start traffic generator</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+    <script>
+        function copyCode(button) {
+            const codeBlock = button.parentElement.querySelector('code');
+            const text = codeBlock.textContent;
+
+            navigator.clipboard.writeText(text).then(() => {
+                const originalHTML = button.innerHTML;
+                button.innerHTML = '<i class="bi bi-check"></i> Copied!';
+                setTimeout(() => {
+                    button.innerHTML = originalHTML;
+                }, 2000);
+            });
+        }
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+                    // Update active nav
+                    document.querySelectorAll('.nav-pills .nav-link').forEach(link => {
+                        link.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

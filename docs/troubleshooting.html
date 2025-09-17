@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Troubleshooting Guide - FRER Test Suite</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .main-container {
+            background: rgba(255,255,255,0.97);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 40px auto;
+            max-width: 1400px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+
+        .issue-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border-left: 5px solid #dc3545;
+            transition: transform 0.3s;
+        }
+
+        .issue-card:hover {
+            transform: translateX(5px);
+        }
+
+        .issue-card.warning {
+            border-left-color: #ffc107;
+        }
+
+        .issue-card.info {
+            border-left-color: #17a2b8;
+        }
+
+        .issue-card.success {
+            border-left-color: #28a745;
+        }
+
+        .solution-box {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            border: 1px solid #dee2e6;
+        }
+
+        .command-line {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+
+        .symptom-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .symptom-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .symptom-list li:before {
+            content: "⚠️";
+            margin-right: 10px;
+        }
+
+        .debug-step {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid #e0e0e0;
+            position: relative;
+            padding-left: 50px;
+        }
+
+        .debug-step-number {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 25px;
+            height: 25px;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .diagnostic-table {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .diagnostic-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .diagnostic-table td {
+            padding: 12px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .flowchart-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .search-box {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .search-input {
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            padding: 10px 20px;
+            width: 100%;
+            transition: border-color 0.3s;
+        }
+
+        .search-input:focus {
+            border-color: #667eea;
+            outline: none;
+        }
+
+        .accordion-button:not(.collapsed) {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            margin-right: 5px;
+            background: #f0f0f0;
+        }
+
+        .tag.critical {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .tag.common {
+            background: #fff3e0;
+            color: #e65100;
+        }
+
+        .tag.configuration {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: rgba(0,0,0,0.2); backdrop-filter: blur(10px);">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="bi bi-diagram-3-fill"></i> FRER Test Suite
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="index.html">Home</a>
+                <a class="nav-link" href="installation.html">Installation</a>
+                <a class="nav-link" href="configuration.html">Configuration</a>
+                <a class="nav-link active" href="troubleshooting.html">Troubleshooting</a>
+                <a class="nav-link" href="api.html">API</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <h1 class="mb-4"><i class="bi bi-tools"></i> Troubleshooting Guide</h1>
+
+        <!-- Search Box -->
+        <div class="search-box">
+            <input type="text" class="search-input" placeholder="🔍 Search for issues, error messages, or symptoms..." id="searchInput" onkeyup="filterIssues()">
+        </div>
+
+        <!-- Quick Diagnostic -->
+        <div class="alert alert-info">
+            <h5><i class="bi bi-lightning-fill"></i> Quick Diagnostic Command</h5>
+            <div class="command-line">
+                bash -c "$(curl -fsSL https://hwkim3330.github.io/frer-test/diagnostic.sh)"
+            </div>
+            <small>This script will automatically check your setup and identify common issues.</small>
+        </div>
+
+        <!-- Common Issues Accordion -->
+        <div class="accordion" id="issuesAccordion">
+            <!-- Issue 1: No FRER Statistics -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#issue1">
+                        <strong>No FRER Statistics / Zero Packet Count</strong>
+                        <span class="tag critical ms-3">Critical</span>
+                        <span class="tag common">Common</span>
+                    </button>
+                </h2>
+                <div id="issue1" class="accordion-collapse collapse show" data-bs-parent="#issuesAccordion">
+                    <div class="accordion-body">
+                        <h5>Symptoms:</h5>
+                        <ul class="symptom-list">
+                            <li>FRER counters show all zeros</li>
+                            <li>No packets passing through compound stream</li>
+                            <li>VCAP hit counters remain at 0</li>
+                        </ul>
+
+                        <h5>Diagnostic Steps:</h5>
+                        <div class="debug-step">
+                            <span class="debug-step-number">1</span>
+                            <strong>Check VCAP Rules</strong>
+                            <div class="command-line">vcap get 1001</div>
+                            <p class="mb-0 mt-2">Verify Counter and Hit values are incrementing</p>
+                        </div>
+
+                        <div class="debug-step">
+                            <span class="debug-step-number">2</span>
+                            <strong>Verify Physical Connections</strong>
+                            <div class="command-line">ip link show | grep "state UP"</div>
+                            <p class="mb-0 mt-2">All interfaces should show state UP</p>
+                        </div>
+
+                        <div class="debug-step">
+                            <span class="debug-step-number">3</span>
+                            <strong>Check VLAN Configuration</strong>
+                            <div class="command-line">bridge vlan show</div>
+                            <p class="mb-0 mt-2">Ensure VLAN 10 is configured on all ports</p>
+                        </div>
+
+                        <div class="solution-box">
+                            <h6><i class="bi bi-lightbulb"></i> Solution:</h6>
+                            <ol>
+                                <li>Recreate VCAP rules with correct port masks</li>
+                                <li>Verify cable connections between boards</li>
+                                <li>Check if traffic is actually being sent to the correct interface</li>
+                                <li>Ensure VLAN tagging matches between sender and receiver</li>
+                            </ol>
+                            <div class="command-line">
+# Reset and reconfigure
+vcap del 1001
+vcap add 1001 is1 10 1 VCAP_KFS_NORMAL \
+  IF_IGR_PORT_MASK 0x008 0x1ff \
+  ETYPE 0x0800 = \
+  VCAP_AFS_S1 ISDX_REPLACE_ENA 1 ISDX_ADD_VAL 1
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Issue 2: SSH Connection Failed -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#issue2">
+                        <strong>Cannot SSH to Board (Connection Refused)</strong>
+                        <span class="tag common ms-3">Common</span>
+                    </button>
+                </h2>
+                <div id="issue2" class="accordion-collapse collapse" data-bs-parent="#issuesAccordion">
+                    <div class="accordion-body">
+                        <h5>Symptoms:</h5>
+                        <ul class="symptom-list">
+                            <li>ssh: connect to host 169.254.100.2 port 22: Connection refused</li>
+                            <li>No route to host</li>
+                            <li>Timeout when trying to connect</li>
+                        </ul>
+
+                        <h5>Diagnostic Steps:</h5>
+                        <div class="debug-step">
+                            <span class="debug-step-number">1</span>
+                            <strong>Check ARP Table</strong>
+                            <div class="command-line">arp -n | grep 169.254.100</div>
+                        </div>
+
+                        <div class="debug-step">
+                            <span class="debug-step-number">2</span>
+                            <strong>Verify IP Configuration</strong>
+                            <div class="command-line">ip addr show enp11s0</div>
+                        </div>
+
+                        <div class="solution-box">
+                            <h6><i class="bi bi-lightbulb"></i> Solution:</h6>
+                            <div class="command-line">
+# Configure management interface
+sudo ip addr add 169.254.13.30/16 dev enp11s0
+sudo ip link set enp11s0 up
+
+# Test connectivity
+ping -c 2 169.254.100.2
+
+# If still failing, use serial console
+screen /dev/ttyUSB0 115200
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Issue 3: R-TAG Not Generated -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#issue3">
+                        <strong>R-TAG Frames Not Generated (0xF1C1)</strong>
+                        <span class="tag configuration ms-3">Configuration</span>
+                    </button>
+                </h2>
+                <div id="issue3" class="accordion-collapse collapse" data-bs-parent="#issuesAccordion">
+                    <div class="accordion-body">
+                        <h5>Symptoms:</h5>
+                        <ul class="symptom-list">
+                            <li>No frames with EtherType 0xF1C1 captured</li>
+                            <li>FRER generation counter not incrementing</li>
+                            <li>Duplicate frames not created</li>
+                        </ul>
+
+                        <h5>Diagnostic:</h5>
+                        <div class="command-line">
+# Check for R-TAG frames
+tcpdump -i eth1 -n -e ether proto 0xf1c1 -c 10
+
+# Verify FRER generation config
+frer iflow 1
+                        </div>
+
+                        <div class="solution-box">
+                            <h6><i class="bi bi-lightbulb"></i> Solution:</h6>
+                            <div class="command-line">
+# Ensure generation is enabled
+frer iflow 1 --generation 1 --dev1 eth1 --dev2 eth2
+
+# Verify ISDX mapping
+vcap get 1001  # Should show ISDX_ADD_VAL: 1
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Issue 4: High CPU Usage -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#issue4">
+                        <strong>High CPU Usage / Performance Issues</strong>
+                        <span class="tag ms-3">Performance</span>
+                    </button>
+                </h2>
+                <div id="issue4" class="accordion-collapse collapse" data-bs-parent="#issuesAccordion">
+                    <div class="accordion-body">
+                        <h5>Symptoms:</h5>
+                        <ul class="symptom-list">
+                            <li>CPU usage above 50%</li>
+                            <li>Slow SSH response</li>
+                            <li>Packet drops under load</li>
+                        </ul>
+
+                        <h5>Performance Tuning:</h5>
+                        <div class="command-line">
+# Check system load
+top -b -n 1 | head -20
+
+# Disable unnecessary flooding
+bridge link set dev eth1 flood off mcast_flood off
+bridge link set dev eth2 flood off mcast_flood off
+
+# Optimize FRER parameters
+frer cs 0 --hlen 10 --reset_time 500
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Issue 5: Duplicate Packets Not Eliminated -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#issue5">
+                        <strong>Duplicate Packets Not Being Eliminated</strong>
+                        <span class="tag critical ms-3">Critical</span>
+                    </button>
+                </h2>
+                <div id="issue5" class="accordion-collapse collapse" data-bs-parent="#issuesAccordion">
+                    <div class="accordion-body">
+                        <h5>Symptoms:</h5>
+                        <ul class="symptom-list">
+                            <li>Same packet received multiple times at destination</li>
+                            <li>DiscardedPackets counter remains at 0</li>
+                            <li>Elimination rate below 90%</li>
+                        </ul>
+
+                        <h5>Root Causes:</h5>
+                        <div class="diagnostic-table">
+                            <table class="table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Component</th>
+                                        <th>Check</th>
+                                        <th>Expected</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Compound Stream</td>
+                                        <td><code>frer cs 0</code></td>
+                                        <td>enable: 1</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Member Streams</td>
+                                        <td><code>frer ms eth1 ID</code></td>
+                                        <td>enable: 1, cs_id: 0</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Ingress Flows</td>
+                                        <td><code>frer iflow 3</code></td>
+                                        <td>ms_enable: 1, pop: 1</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="solution-box">
+                            <h6><i class="bi bi-lightbulb"></i> Complete Fix:</h6>
+                            <div class="command-line">
+# Reset and reconfigure elimination
+frer cs 0 --enable 1 --alg 0 --hlen 10 --reset_time 500
+frer ms eth1 28 --enable 1 --alg 1 --reset_time 500 --cs_id 0
+frer ms eth2 30 --enable 1 --alg 1 --reset_time 500 --cs_id 0
+frer iflow 3 --ms_enable 1 --ms_id 28 --pop 1 --dev1 eth3
+frer iflow 4 --ms_enable 1 --ms_id 30 --pop 1 --dev1 eth3
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Diagnostic Flowchart -->
+        <div class="flowchart-container mt-5">
+            <h3>Diagnostic Flowchart</h3>
+            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxyZWN0IHg9IjM1MCIgeT0iMjAiIHdpZHRoPSIxMDAiIGhlaWdodD0iNDAiIGZpbGw9IiM2NjdlZWEiIHJ4PSI1Ii8+CiAgICA8dGV4dCB4PSI0MDAiIHk9IjQ1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSI+U3RhcnQ8L3RleHQ+CiAgICA8bGluZSB4MT0iNDAwIiB5MT0iNjAiIHgyPSI0MDAiIHkyPSI5MCIgc3Ryb2tlPSIjMzMzIiBzdHJva2Utd2lkdGg9IjIiLz4KICAgIAogICAgPHJlY3QgeD0iMzI1IiB5PSI5MCIgd2lkdGg9IjE1MCIgaGVpZ2h0PSI0MCIgZmlsbD0iI2ZmYzEwNyIgcng9IjUiLz4KICAgIDx0ZXh0IHg9IjQwMCIgeT0iMTE1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5DaGVjayBMaW5rcz88L3RleHQ+CiAgICA8bGluZSB4MT0iNDAwIiB5MT0iMTMwIiB4Mj0iNDAwIiB5Mj0iMTYwIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgCiAgICA8cmVjdCB4PSIzMjUiIHk9IjE2MCIgd2lkdGg9IjE1MCIgaGVpZ2h0PSI0MCIgZmlsbD0iI2ZmYzEwNyIgcng9IjUiLz4KICAgIDx0ZXh0IHg9IjQwMCIgeT0iMTg1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5WQ0FQIEhpdHM/PC90ZXh0PgogICAgPGxpbmUgeDE9IjQwMCIgeTE9IjIwMCIgeDI9IjQwMCIgeTI9IjIzMCIgc3Ryb2tlPSIjMzMzIiBzdHJva2Utd2lkdGg9IjIiLz4KICAgIAogICAgPHJlY3QgeD0iMzI1IiB5PSIyMzAiIHdpZHRoPSIxNTAiIGhlaWdodD0iNDAiIGZpbGw9IiNmZmMxMDciIHJ4PSI1Ii8+CiAgICA8dGV4dCB4PSI0MDAiIHk9IjI1NSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+RlJFUiBFbmFibGVkPzwvdGV4dD4KICAgIDxsaW5lIHgxPSI0MDAiIHkxPSIyNzAiIHgyPSI0MDAiIHkyPSIzMDAiIHN0cm9rZT0iIzMzMyIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICAKICAgIDxyZWN0IHg9IjM1MCIgeT0iMzAwIiB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjMjhhNzQ1IiByeD0iNSIvPgogICAgPHRleHQgeD0iNDAwIiB5PSIzMjUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IndoaXRlIj5Xb3JraW5nITwvdGV4dD4KPC9zdmc+" alt="Diagnostic Flowchart" class="img-fluid">
+        </div>
+
+        <!-- Command Reference -->
+        <div class="mt-5">
+            <h3>Quick Command Reference</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Diagnostic Commands</h5>
+                    <div class="command-line">
+# Check all FRER stats
+frer cs 0 --cnt
+frer ms eth1 28 --cnt
+frer ms eth2 30 --cnt
+
+# Verify VCAP rules
+vcap -v is1 | grep -A20 "Rule:"
+
+# Monitor traffic
+tcpdump -i any -n -e vlan 10 -c 20
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h5>Reset Commands</h5>
+                    <div class="command-line">
+# Clear FRER counters
+frer cs 0 --clr
+frer ms eth1 28 --clr
+frer ms eth2 30 --clr
+
+# Reset VCAP rules
+vcap del 1001
+vcap del 1002
+
+# Restart bridge
+ip link set br0 down
+ip link set br0 up
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error Messages Database -->
+        <div class="mt-5">
+            <h3>Common Error Messages</h3>
+            <table class="diagnostic-table w-100">
+                <thead>
+                    <tr>
+                        <th>Error Message</th>
+                        <th>Cause</th>
+                        <th>Solution</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>Netlink Error: Netlink message type is not supported</code></td>
+                        <td>Invalid VCAP key/action combination</td>
+                        <td>Check VCAP syntax, use correct keyset</td>
+                    </tr>
+                    <tr>
+                        <td><code>nl_recvmsgs_default() failed, rc: -7</code></td>
+                        <td>Invalid FRER parameter</td>
+                        <td>Verify member stream IDs exist</td>
+                    </tr>
+                    <tr>
+                        <td><code>RTNETLINK answers: File exists</code></td>
+                        <td>Bridge already created</td>
+                        <td>Safe to ignore or delete first</td>
+                    </tr>
+                    <tr>
+                        <td><code>keyset validation failed: -2</code></td>
+                        <td>VCAP keyset mismatch</td>
+                        <td>Use VCAP_KFS_NORMAL for basic rules</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Contact Support -->
+        <div class="alert alert-primary mt-5">
+            <h5><i class="bi bi-headset"></i> Need More Help?</h5>
+            <p class="mb-2">If you're still experiencing issues:</p>
+            <ul class="mb-0">
+                <li>Check the <a href="https://github.com/hwkim3330/frer-test/issues">GitHub Issues</a></li>
+                <li>Join our <a href="#">Community Forum</a></li>
+                <li>Email: <a href="mailto:hwkim3330@gmail.com">hwkim3330@gmail.com</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function filterIssues() {
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toLowerCase();
+            const accordionItems = document.querySelectorAll('.accordion-item');
+
+            accordionItems.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                if (text.includes(filter)) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
